@@ -1,5 +1,5 @@
 {
-  "name": "@jupiterone/integration-template",
+  "name": "@jupiterone/graph-aws-extender-scan-factory",
   "version": "0.0.0",
   "description": "A JupiterOne Integration",
   "license": "MPL-2.0",
@@ -18,7 +18,7 @@
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
     "format": "prettier --write '**/*.{ts,js,json,css,md,yml}'",
     "type-check": "tsc",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:env": "LOAD_ENV=1 yarn test",
     "test:ci": "yarn lint && yarn type-check && yarn test",
     "build": "tsc -p tsconfig.dist.json --declaration",
@@ -26,11 +26,12 @@
     "prepack": "yarn build"
   },
   "peerDependencies": {
-    "@jupiterone/integration-sdk-core": "^6.0.0"
+    "@jupiterone/integration-sdk-core": "^6.3.0"
   },
   "devDependencies": {
-    "@jupiterone/integration-sdk-core": "^6.0.0",
-    "@jupiterone/integration-sdk-dev-tools": "^6.0.0",
-    "@jupiterone/integration-sdk-testing": "^6.0.0"
-  }
+    "@jupiterone/integration-sdk-core": "^6.3.0",
+    "@jupiterone/integration-sdk-dev-tools": "^6.3.0",
+    "@jupiterone/integration-sdk-testing": "^6.3.0"
+  },
+  "dependencies": {}
 }
