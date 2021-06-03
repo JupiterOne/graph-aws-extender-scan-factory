@@ -56,7 +56,7 @@ with JupiterOne in the [integration documentation](docs/jupiterone.md).
    JUPITERONE_API_KEY=<jupiterone-api-key>
    JUPITERONE_ACCOUNT=<jupiterone-account-id>
    ```
-4. Update the
+4. Update the `src/config.ts` file with scan factory scans & pointers you would like to ingest.
 5. Run
    `yarn j1-integration run --integrationInstanceId <integration-instance-id>`
    from a command line
