@@ -1,62 +1,70 @@
-import {
-  IntegrationExecutionContext,
-  IntegrationValidationError,
-  IntegrationInstanceConfigFieldMap,
-  IntegrationInstanceConfig,
-} from '@jupiterone/integration-sdk-core';
-import { createAPIClient } from './client';
+interface ScanFactoryScan {
+  amiId: string;
+  ownerId: number;
+  name: string;
+  cyberVault: CyberVaultCve[];
+}
 
-/**
- * A type describing the configuration fields required to execute the
- * integration for a specific account in the data provider.
- *
- * When executing the integration in a development environment, these values may
- * be provided in a `.env` file with environment variables. For example:
- *
- * - `CLIENT_ID=123` becomes `instance.config.clientId = '123'`
- * - `CLIENT_SECRET=abc` becomes `instance.config.clientSecret = 'abc'`
- *
- * Environment variables are NOT used when the integration is executing in a
- * managed environment. For example, in JupiterOne, users configure
- * `instance.config` in a UI.
- */
-export const instanceConfigFields: IntegrationInstanceConfigFieldMap = {
-  clientId: {
-    type: 'string',
+interface CyberVaultCve {
+  id: string;
+}
+
+interface ScanFactoryPointer {
+  originAmiId: string;
+  encryptedAmiId: string;
+}
+
+const scanFactoryScans: ScanFactoryScan[] = [
+  {
+    // CS1 Origin
+    amiId: 'ami-1111111111111111',
+    ownerId: 139824376857,
+    name: 'hsbc-amzn2-Proxy-AL2-2021-12-26_13.27.03',
+    cyberVault: [{ id: 'CVE-11111' }],
   },
-  clientSecret: {
-    type: 'string',
-    mask: true,
+  {
+    // NCS1 origin
+    amiId: 'ami-4444444444444444',
+    ownerId: 508776121216,
+    name: 'hsbc-amzn2-Proxy-AL2-2021-12-26_13.27.03',
+    cyberVault: [{ id: 'CVE-11111' }],
   },
+  {
+    // NCS1 - ap-east-1
+    amiId: 'ami-3333333333333333',
+    ownerId: 508776121216,
+    name: 'hsbc-amzn2-Proxy-AL2-2021-12-26_13.27.03',
+    cyberVault: [{ id: 'CVE-11111' }],
+  },
+  {
+    // NCS2 Origin
+    amiId: 'ami-2222222222222222',
+    ownerId: 139824376857,
+    name: 'hsbc-amzn2-Proxy-AL2-2021-12-26_13.27.03',
+    cyberVault: [{ id: 'CVE-11111' }],
+  },
+];
+
+const scanFactoryPointers: ScanFactoryPointer[] = [
+  {
+    originAmiId: 'ami-1111111111111111',
+    encryptedAmiId: 'ami-095d00f1ca707489f',
+  },
+  {
+    originAmiId: 'ami-2222222222222222',
+    encryptedAmiId: 'ami-040702d0bf20e67b3',
+  },
+  {
+    originAmiId: 'ami-3333333333333333',
+    encryptedAmiId: 'ami-0f30ae0b8a35df601',
+  },
+  {
+    originAmiId: 'ami-4444444444444444',
+    encryptedAmiId: 'ami-0013f08799372764e',
+  },
+];
+
+export const config = {
+  scanFactoryScans,
+  scanFactoryPointers,
 };
-
-/**
- * Properties provided by the `IntegrationInstance.config`. This reflects the
- * same properties defined by `instanceConfigFields`.
- */
-export interface IntegrationConfig extends IntegrationInstanceConfig {
-  /**
-   * The provider API client ID used to authenticate requests.
-   */
-  clientId: string;
-
-  /**
-   * The provider API client secret used to authenticate requests.
-   */
-  clientSecret: string;
-}
-
-export async function validateInvocation(
-  context: IntegrationExecutionContext<IntegrationConfig>,
-) {
-  const { config } = context.instance;
-
-  if (!config.clientId || !config.clientSecret) {
-    throw new IntegrationValidationError(
-      'Config requires all of {clientId, clientSecret}',
-    );
-  }
-
-  const apiClient = createAPIClient(config);
-  await apiClient.verifyAuthentication();
-}

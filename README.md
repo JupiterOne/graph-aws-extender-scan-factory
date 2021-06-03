@@ -25,16 +25,41 @@ with JupiterOne in the [integration documentation](docs/jupiterone.md).
    development or on-prem), values for these parameters are read from Node's
    `process.env` by converting config field names to constant case. For example,
    `clientId` is read from `process.env.CLIENT_ID`.
-   
+
    The `.env` file is loaded into `process.env` before the integration code is
    executed. This file is not required should you configure the environment
-   another way. `.gitignore` is configured to to avoid commiting the `.env` file.
+   another way. `.gitignore` is configured to to avoid commiting the `.env`
+   file.
 
 ### Running the integration
 
 1. `yarn start` to collect data
 2. `yarn graph` to show a visualization of the collected data
 3. `yarn j1-integration -h` for additional commands
+
+### Ingesting data as a custom integration
+
+**In JupiterOne**
+
+1. Create a custom integration in JupiterOne
+   (apps.us.jupiterone.io/integrations/custom)
+2. Generate an INTEGRATION API KEY for use with this custom integration
+
+**In this project / CLI**
+
+1. Clone this repo
+   (`git clone git@github.com:JupiterOne/graph-aws-extender-scan-factory.git`)
+   or download and unzip this project.
+2. Run `yarn install` from a command line
+3. Create a `.env` file at the root of this project with the following values:
+   ```
+   JUPITERONE_API_KEY=<jupiterone-api-key>
+   JUPITERONE_ACCOUNT=<jupiterone-account-id>
+   ```
+4. Update the
+5. Run
+   `yarn j1-integration run --integrationInstanceId <integration-instance-id>`
+   from a command line
 
 ### Making Contributions
 
